@@ -1,40 +1,39 @@
-#ifndef COMPRESSION_HPP
-#define COMPRESSION_HPP
+#ifndef HUFFTREE_HPP
+#define HUFFTREE_HPP
 
 #include <vector>
+#include <stddef.h>
+
+using namespace std;
 
 struct HuffNode
 {
-  HuffNode * leftChild ; // coded 0
-  HuffNode * rightChild; // coded 1
-  vector<unsigned char> * leftArr;
-  vector<unsigned char> * rightArr;
-  unsigned char leafChar;
-  unsigned long long charCount;
+  HuffNode *            leftChild ; // coded 0
+  HuffNode *            rightChild; // coded 1
+  vector<unsigned char> leftArr;
+  vector<unsigned char> rightArr;
+  unsigned long long    charCount;
+
   HuffNode * copy(HuffNode * n)
   {
     this->leftChild = n->leftChild;
     this->rightChild = n->rightChild;
     this->leftArr = n->leftArr;
     this->rightArr = n->rightArr;
-    this->leafChar = n->leafChar;
     this->charCount = n->charCount;
     return this;
   }
 };
+
 struct NodeList
 {
   NodeList * next;
   HuffNode * node;
   size_t     size;
-  NodeList()
-  {
-    next = NULL;
-    node = NULL;
-    size = 1;
-  }
+
+  NodeList();
   void append(HuffNode * n);
-  NodeList * operator[](size_t n);
+  NodeList * operator[](size_t n); 
   HuffNode * extract(size_t n);
 };
 
@@ -52,8 +51,8 @@ public:
   HuffTree(char * fileName);
   ~HuffTree();
 
-  encode(char *);
-  decode(char *);
+  //encode(char *);
+  //decode(char *);
 };
 
 #endif

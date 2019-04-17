@@ -1,12 +1,20 @@
-#include "compression.hpp"
+#include "HuffTree.hpp"
 
+using namespace std;
+
+NodeList::NodeList()
+{
+  next = NULL;
+  node = NULL;
+  size = 1;
+}
+ 
 void NodeList::append(HuffNode * n)
 {
   NodeList * tmp = this;
   while ((tmp->size++)-2) tmp = tmp->next;
   tmp->next = new NodeList();
-  tmp = tmp->next;
-  tmp->node = n;
+  tmp->next->node = n;
 } 
 NodeList * NodeList::operator[](size_t n)
 {
@@ -17,7 +25,8 @@ NodeList * NodeList::operator[](size_t n)
     tmp = tmp->next;
   }
   return tmp;
-}
+} 
+ 
 HuffNode * NodeList::extract(size_t n)
 {
   NodeList * prv = NULL;
@@ -48,4 +57,3 @@ HuffNode * NodeList::extract(size_t n)
   delete nxt;
   return tmp;
 }
- 
