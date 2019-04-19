@@ -16,6 +16,7 @@ struct HuffNode
   vector<unsigned char> rightArr;
   unsigned long long    charCount;
 
+
   HuffNode * copy(HuffNode * n)
   {
     this->leftChild = n->leftChild;
@@ -47,6 +48,7 @@ class HuffTree
   bool findMins(size_t *, size_t *, NodeList *);
   void buildBranch(size_t, size_t, NodeList *);
   HuffNode * buildTree();
+  void destroyNode(HuffNode *);
   vector<int> search(HuffNode *, unsigned char);
   void buildArr();
 

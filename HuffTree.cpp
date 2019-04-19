@@ -6,7 +6,7 @@ HuffTree::HuffTree(unsigned long long * charProbs)
 {
   for (int i = 0; i <= UCHAR_MAX; i++)
     this->charProbs[i] = charProbs[i];
-  buildTree();
+  buildArr();
 }
 
 HuffTree::~HuffTree()
@@ -95,6 +95,22 @@ HuffNode * HuffTree::buildTree()
   delete leafs;
   return root;
 }
+
+void HuffTree::destroyNode(HuffNode * curNode)
+{
+  if (curNode != NULL)
+  {
+    destroyNode(curNode->leftChild);
+    destroyNode(curNode->rightChild);
+    //delete curNode->leftArr;
+    //delete curNode->rightArr;
+    delete curNode;
+    curNode = NULL;
+  }
+  return;
+}
+
+
 vector<int> HuffTree::search(HuffNode * root, unsigned char c)
 {
   vector<int> charCode;
@@ -128,6 +144,7 @@ void HuffTree::buildArr()
   HuffNode * root = buildTree();
   for (unsigned char i = 0; i <= UCHAR_MAX; i++)
     treeArr[i] = search(root, i);
+  destroyNode(root);
   return;
 }
 vector<int>  HuffTree::encode(unsigned char inChar)
