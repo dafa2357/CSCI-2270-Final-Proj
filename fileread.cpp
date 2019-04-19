@@ -39,7 +39,6 @@ unsigned long long * inFiProbs(string inFilename){// , string oFile){///REMOVE A
 	return probability;
 
 }
-vector <int>   encode(unsigned char temp);
 
 bool pushtofile(string inFilename, ofstream * outf){
 
