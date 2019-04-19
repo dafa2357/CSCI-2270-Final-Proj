@@ -44,10 +44,10 @@ long long * inFiProbs(string inFilename, string oFile){
 
 int main()
 {
-  long long * pr = inFiProbs("lec12.pptx", "testy.pptx");
-  unsigned char q =0;
-  for( q = 0; q < UCHAR_MAX; q++ )//prints counts of each uchar from inFile                 //USED FOR TESTING: REMOVE
-    cout<< q << pr[q] <<endl;
+	long long * pr = inFiProbs("lec12.pptx", "testy.pptx");
+	unsigned char q =0;
+	for( q = 0; q < UCHAR_MAX; q++ )//prints counts of each uchar from inFile                 //USED FOR TESTING: REMOVE
+		cout<< q << pr[q] <<endl;
 
 /*///////////////////////////////////////
   MAKE WORK WITH DIRCTORIES
