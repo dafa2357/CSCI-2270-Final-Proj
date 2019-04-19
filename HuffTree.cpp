@@ -80,7 +80,7 @@ void HuffTree::buildTree()
   //tmp->rightArr = NULL;
   tmp->charCount = this->charProbs[0];
   leafs->node = tmp;
-  for (unsigned char i = 1; i < 256 && i; i++)
+  for (unsigned char i = 1; i <= UCHAR_MAX && i; i++)
   {
     tmp = new HuffNode();
     tmp->leftChild  = NULL;
