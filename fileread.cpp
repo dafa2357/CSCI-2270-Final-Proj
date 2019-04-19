@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstddef> // for std::size_t -> is a typedef on an unsinged int
 #include <climits>
+#include <bitset>
+#include <vector>
 using namespace std;
 //type handling for input and output use BOOST FILESYSTEM LIBRARY
 
@@ -10,7 +12,7 @@ unsigned long long * inFiProbs(string inFilename){// , string oFile){///REMOVE A
 	ifstream inFile;//creatae ifstream;
 	inFile.open( inFilename, ios::in|ios::binary);//open file as binary input
 	if(!(inFile.is_open()) || !(inFile.good())) {//check if open and good
-		cout<<"File Not Opened."<<endl;
+		cout<<"Input File Not Opened."<<endl;
 		inFile.close();
 		return nullptr;
   	}
@@ -37,14 +39,65 @@ unsigned long long * inFiProbs(string inFilename){// , string oFile){///REMOVE A
 	return probability;
 
 }
+vector <int>   encode(unsigned char temp);
+
+bool pushtofile(string inFilename, ofstream * outf){
+
+	if(!(outf->is_open()) || (outf->good())) {//check output file is open and good
+		cout<<"Output File Not Opened."<<endl;
+		outf->close();
+		return 1;
+		}
+
+	ifstream inFile;//create ifstream;
+
+	inFile.open( inFilename, ios::in|ios::binary);//open file as binary input
+	if(!(inFile.is_open()) || !(inFile.good())) {//check if open and good
+		cout<<"Input File Not Opened."<<endl;
+		inFile.close();
+		return 1;
+		}
+
+	std::bitset <1> trucks;
+	unsigned char ILikeTurtles = 0; //temp storage of single byte
+	vector <int> encodedBits;//temporary vector of bits
+	size_t whAtsAbYte = 0;//number of bits in encodedBits vector
+	std::streambuf * inF = inFile.rdbuf();//creates accesible stream buffer
+	//ofstream outf ( oFile, std::ofstream::binary| std::ofstream::trunc);//creates output file of same type               //USED FOR TESTING: REMOVE
+
+	while( inF->sgetc() != EOF){ //checks for valid input
+		ILikeTurtles = inF->sbumpc();//gets uchar from file moves to next position in streambuf
+		encodedBits = encode(ILikeTurtles);//gets bit vector
+		whAtsAbYte = encodedBits.size();//gets length of bit string/vector
+		for(size_t i = 0; i < whAtsAbYte; i++){//runs through bit vector pushing single bits to file
+			trucks[0] = encodedBits[i];//bit set to correct val
+			(*outf)<<trucks[0];//bit pushed to output file
+		}
+		encodedBits.clear();
+	}
+	inFile.close();
+	return 0;
+}
 
 
 int main()
 {
-	unsigned long long * pr = inFiProbs("lec12.pptx");
+	string filename = "lec12.pptx";
+	unsigned long long * pr = inFiProbs(filename);
 	unsigned char q =0;
-	for( q = 0; q < UCHAR_MAX; q++ )//prints counts of each uchar from inFile                 //USED FOR TESTING: REMOVE
-		cout<< q << pr[q] <<endl;
+	for( q = 0; q < UCHAR_MAX; q++ ){//prints counts of each uchar from inFile                 //USED FOR TESTING: REMOVE
+		cout<< q << pr[q] <<endl;}
+	char lename = (char)filename.size();
+	string ofilename = filename;
+	ofilename += ".truck";
+	ofstream outf ( ofilename, std::ofstream::binary| std::ofstream::trunc);//creates .truck output file
+	outf << lename;
+	outf<<filename;
+	for( q = 0; q < UCHAR_MAX; q++ ){//puts counts of each uchar to output file
+			outf<< pr[q];}
+	pushtofile(filename, &outf);
+
+
 
 /*///////////////////////////////////////
   MAKE WORK WITH DIRCTORIES
