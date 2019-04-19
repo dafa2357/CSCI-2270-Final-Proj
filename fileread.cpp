@@ -6,7 +6,7 @@
 using namespace std;
 //type handling for input and output use BOOST FILESYSTEM LIBRARY
 
-long long * inFiProbs(string inFilename, string oFile){///REMOVE ALL instaces of output file
+long long * inFiProbs(string inFilename){// , string oFile){///REMOVE ALL instaces of output file
 	ifstream inFile;//creatae ifstream;
 	inFile.open( inFilename, ios::in|ios::binary);//open file as binary input
 	if(!(inFile.is_open()) || !(inFile.good())) {//check if open and good
@@ -22,17 +22,17 @@ long long * inFiProbs(string inFilename, string oFile){///REMOVE ALL instaces of
 
   	unsigned char ILikeTurtles = 0; //temp storage of single byte
   	std::streambuf * inF = inFile.rdbuf();//creates accesible stream buffer
-	ofstream outf ( oFile, std::ofstream::binary| std::ofstream::trunc);//creates output file of same type               //USED FOR TESTING: REMOVE
+	//ofstream outf ( oFile, std::ofstream::binary| std::ofstream::trunc);//creates output file of same type               //USED FOR TESTING: REMOVE
 	
 	while( inF->sgetc() != EOF){ //checks for valid input
     		ILikeTurtles = inF->sbumpc();//gets uchar from file moves to next position in streambuf
   		//  cout<<":"<<ILikeTurtles                                                                                  //USED FOR TESTING: REMOVE
     		probability[ILikeTurtles]++;
-    		outf<<ILikeTurtles;//outputs uchar to file                                                                   //USED FOR TESTING: REMOVE
+    		//outf<<ILikeTurtles;//outputs uchar to file                                                                   //USED FOR TESTING: REMOVE
   	}
 
 	//cout<<"3"<<endl;                                                                                                    //USED FOR TESTING: REMOVE
-	outf.close();                                                                                                         //USED FOR TESTING: REMOVE
+	//outf.close();                                                                                                         //USED FOR TESTING: REMOVE
 	inFile.close();
 	return probability;
 
@@ -55,48 +55,3 @@ int main()
 
 	return 0;
 }
-
-/*///////////////////////////////////////////////////////////////////
-                          OTHER METHOD
-///////////////////////////////////////////////////////////////////*/
-
-/*#include <iostream>
-#include <fstream>
-#include <cstring> // for std::strlen
-#include <cstddef> // for std::size_t -> is a typedef on an unsinged int
-
-using namespace std ;
-
-int main()
-{
-	ifstream inFile;
-	size_t size = 0; // here
-
-	inFile.open( "test.txt", ios::in|ios::binary );
-	char* oData = 0;
-
-	inFile.seekg(0, ios::end); // set the pointer to the end
-	size = inFile.tellg() ; // get the length of the file
-	cout << "Size of file: " << size;
-	inFile.seekg(0, ios::beg); // set the pointer to the beginning
-
-	oData = new char[ size+1 ]; //  for the '\0'
-	inFile.read( oData, size );
-	oData[size] = '\0' ; // set '\0'
-	cout << " oData size: " << size << "\n";
-
-  inFile.close();
-
-	//print data
-	for ( size_t i = 0; i < size; i++ )
-	{
-		cout << oData[i];
-    cout << "\n";
-		cout << oData[i] << " + 'a' = " << ( oData[i] + 'a' );
-		cout << "\n\n";
-
-	}
-
-	return 0;
-}
-*/
