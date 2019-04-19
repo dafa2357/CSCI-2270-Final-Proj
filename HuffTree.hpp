@@ -2,6 +2,7 @@
 #define HUFFTREE_HPP
 
 #include <vector>
+#include <climits>
 #include <stddef.h>
 
 using namespace std;
@@ -40,7 +41,7 @@ struct NodeList
 class HuffTree
 {
   HuffNode * root; 
-  unsigned long long charProbs[256];
+  unsigned long long charProbs[UCHAR_MAX +1];
 
   bool findMins(size_t *, size_t *, NodeList *);
   void buildBranch(size_t, size_t, NodeList *);
