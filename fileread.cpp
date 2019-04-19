@@ -6,7 +6,7 @@
 using namespace std;
 //type handling for input and output use BOOST FILESYSTEM LIBRARY
 
-long long * inFiProbs(string inFilename, string oFile){
+long long * inFiProbs(string inFilename, string oFile){///REMOVE ALL instaces of output file
 	ifstream inFile;//creatae ifstream;
 	inFile.open( inFilename, ios::in|ios::binary);//open file as binary input
 	if(!(inFile.is_open()) || !(inFile.good())) {//check if open and good
@@ -30,9 +30,6 @@ long long * inFiProbs(string inFilename, string oFile){
     		probability[ILikeTurtles]++;
     		outf<<ILikeTurtles;//outputs uchar to file                                                                   //USED FOR TESTING: REMOVE
   	}
-
-  	for( ILikeTurtles = 0; ILikeTurtles < UCHAR_MAX; ILikeTurtles++ )//prints counts of each uchar from inFile            //USED FOR TESTING: REMOVE
-    		cout<<ILikeTurtles<<probability[ILikeTurtles]<<endl;                                                          //USED FOR TESTING: REMOVE
 
 	//cout<<"3"<<endl;                                                                                                    //USED FOR TESTING: REMOVE
 	outf.close();                                                                                                         //USED FOR TESTING: REMOVE
