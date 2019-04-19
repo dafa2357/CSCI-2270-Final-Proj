@@ -5,7 +5,10 @@
 #include <climits>
 #include <bitset>
 #include <vector>
+#include "HuffTree.hpp"
 using namespace std;
+
+
 //type handling for input and output use BOOST FILESYSTEM LIBRARY
 
 unsigned long long * inFiProbs(string inFilename){// , string oFile){///REMOVE ALL instaces of output file
@@ -40,7 +43,7 @@ unsigned long long * inFiProbs(string inFilename){// , string oFile){///REMOVE A
 
 }
 
-bool pushtofile(string inFilename, ofstream * outf){
+bool pushtofile(string inFilename, ofstream * outf, HuffTree * test){
 
 	if(!(outf->is_open()) || (outf->good())) {//check output file is open and good
 		cout<<"Output File Not Opened."<<endl;
@@ -66,7 +69,7 @@ bool pushtofile(string inFilename, ofstream * outf){
 
 	while( inF->sgetc() != EOF){ //checks for valid input
 		ILikeTurtles = inF->sbumpc();//gets uchar from file moves to next position in streambuf
-		encodedBits = encode(ILikeTurtles);//gets bit vector
+		encodedBits = test->encode(ILikeTurtles);//gets bit vector
 		whAtsAbYte = encodedBits.size();//gets length of bit string/vector
 		for(size_t i = 0; i < whAtsAbYte; i++){//runs through bit vector pushing single bits to file
 			trucks[0] = encodedBits[i];//bit set to correct val
@@ -81,20 +84,27 @@ bool pushtofile(string inFilename, ofstream * outf){
 
 int main()
 {
-	string filename = "lec12.pptx";
+	string filename = "test.txt";
 	unsigned long long * pr = inFiProbs(filename);
 	unsigned char q =0;
 	for( q = 0; q < UCHAR_MAX; q++ ){//prints counts of each uchar from inFile                 //USED FOR TESTING: REMOVE
 		cout<< q << pr[q] <<endl;}
+		//cout<<"0"<<endl;
+	HuffTree * test = new HuffTree(pr);
+	//cout<<"1"<<endl;
+
 	char lename = (char)filename.size();
 	string ofilename = filename;
 	ofilename += ".truck";
-	ofstream outf ( ofilename, std::ofstream::binary| std::ofstream::trunc);//creates .truck output file
+
+//	cout<<"2"<<endl;
+
+	ofstream outf ( "tezs.truck", std::ofstream::binary| std::ofstream::trunc);//creates .truck output file
 	outf << lename;
 	outf<<filename;
 	for( q = 0; q < UCHAR_MAX; q++ ){//puts counts of each uchar to output file
 			outf<< pr[q];}
-	pushtofile(filename, &outf);
+	pushtofile(filename, &outf, test);
 
 
 

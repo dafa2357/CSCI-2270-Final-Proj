@@ -1,6 +1,6 @@
 #ifndef HUFFTREE_HPP
 #define HUFFTREE_HPP
-
+#include <iostream>
 #include <vector>
 #include <bitset>
 #include <climits>
@@ -36,7 +36,8 @@ struct NodeList
 
   NodeList();
   void append(HuffNode * n);
-  NodeList * operator[](size_t n); 
+  NodeList * at(size_t n);
+  NodeList * operator[](size_t n);
   HuffNode * extract(size_t n);
 };
 
