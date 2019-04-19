@@ -2,6 +2,7 @@
 #define HUFFTREE_HPP
 
 #include <vector>
+#include <bitset>
 #include <climits>
 #include <stddef.h>
 
@@ -40,20 +41,22 @@ struct NodeList
 
 class HuffTree
 {
-  HuffNode * root; 
-  unsigned long long charProbs[UCHAR_MAX +1];
+  unsigned long long charProbs[UCHAR_MAX + 1];
+  vector<int> treeArr[UCHAR_MAX + 1];
 
   bool findMins(size_t *, size_t *, NodeList *);
   void buildBranch(size_t, size_t, NodeList *);
-  void buildTree();
+  HuffNode * buildTree();
+  vector<int> search(HuffNode *, unsigned char);
+  void buildArr();
 
 public:
   HuffTree(unsigned long long * charProbs);
   HuffTree(char * fileName);
   ~HuffTree();
 
-  //encode(char *);
-  //decode(char *);
+  vector<int> encode(unsigned char);
+  //decode();
 };
 
 #endif

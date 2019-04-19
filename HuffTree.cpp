@@ -67,17 +67,15 @@ void HuffTree::buildBranch(size_t leftIndex, size_t rightIndex, NodeList * list)
   list->append(n);
 }
 
-void HuffTree::buildTree()
+HuffNode * HuffTree::buildTree()
 {
   size_t l,r;
   NodeList * leafs = new NodeList();
   HuffNode * tmp   = new HuffNode();
+  HuffNode * root;
   tmp->leftChild   = NULL;
   tmp->rightChild  = NULL;
   tmp->leftArr.push_back(0);
-  //tmp->leftArr = new vector<unsigned char>[1];
-  //tmp->leftArr[0] = 0;
-  //tmp->rightArr = NULL;
   tmp->charCount = this->charProbs[0];
   leafs->node = tmp;
   for (unsigned char i = 1; i <= UCHAR_MAX && i; i++)
@@ -86,9 +84,6 @@ void HuffTree::buildTree()
     tmp->leftChild  = NULL;
     tmp->rightChild = NULL;
     tmp->leftArr.push_back(i);
-    //tmp->leftArr = new vector<unsigned char>[1];
-    //tmp->leftArr[0] = i;
-    //tmp->rightArr = NULL;
     tmp->charCount = this->charProbs[i];
     leafs->append(tmp);
   }
@@ -98,6 +93,44 @@ void HuffTree::buildTree()
   }
   root = leafs->extract(0);
   delete leafs;
+  return root;
+}
+vector<int> HuffTree::search(HuffNode * root, unsigned char c)
+{
+  vector<int> charCode;
+  HuffNode * tmpNode = root;
+  bool atLeaf = false;
+  size_t i;
+  int code = 1;
+  while (!atLeaf)
+  {
+    code = 1;
+    for (i = 0; i < tmpNode->leftArr.size(); i++)
+    {
+      if (c == tmpNode->leftArr[i]) code = 0;
+    }
+    charCode.push_back(code);
+    if (code)
+    {
+      if (tmpNode->rightChild == NULL) break;
+      tmpNode = tmpNode->rightChild;
+    }
+    else
+    {
+      if (tmpNode->leftChild == NULL) break;
+      tmpNode = tmpNode->leftChild;
+    }
+  }
+  return charCode;
+}
+void HuffTree::buildArr()
+{
+  HuffNode * root = buildTree();
+  for (unsigned char i = 0; i <= UCHAR_MAX; i++)
+    treeArr[i] = search(root, i);
   return;
 }
-
+vector<int>  HuffTree::encode(unsigned char inChar)
+{
+  return treeArr[inChar];
+}
