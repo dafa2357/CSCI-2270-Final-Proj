@@ -1,10 +1,10 @@
 #include "HuffTree.hpp"
-
+#include <climits>
 using namespace std;
 
 HuffTree::HuffTree(unsigned long long * charProbs)
 {
-  for (int i = 0; i < 256; i++)
+  for (int i = 0; i <= UCHAR_MAX; i++)
     this->charProbs[i] = charProbs[i];
   buildTree();
 }
