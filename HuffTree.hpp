@@ -28,8 +28,7 @@ struct HuffNode
   }
 };
 
-struct NodeList
-{
+struct NodeList {
   NodeList * next;
   HuffNode * node;
   size_t     size;
