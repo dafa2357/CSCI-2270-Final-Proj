@@ -67,14 +67,16 @@ HuffNode * NodeList::extract(size_t n)
     {
       this->node = nxt->node;
       this->next = nxt->next;
+      this->size--;
       nxt->node = NULL;
       nxt->next = NULL;
-      delete nxt;
+      //!!! needs destructor !!!
+//      delete nxt;
     }
     return tmp;
   }
   prv->next = nxt->next;
   nxt->next = NULL;
-  delete nxt;
+//  delete nxt;
   return tmp;
 }

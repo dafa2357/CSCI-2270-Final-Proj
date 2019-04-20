@@ -25,17 +25,33 @@ bool HuffTree::findMins(size_t * iL, size_t * iR, NodeList * list)
   if (list->size < 2) return false;
   *iL = 0;
   *iR = 1;
+  size_t i;
 
-  for (size_t i = 2; i < list->size; i++)
+  for (i = 2; i < list->size; i++)
   {
 
     if ( list->at(i)->node->charCount < list->at(*iL)->node->charCount
       && list->at(i)->node->charCount < list->at(*iR)->node->charCount)
-    { *iL > *iR ? *iL = i : *iR = i;}
+    { 
+      cout<<'8'<<endl;
+      list->at(*iL)->node->charCount > list->at(*iR)->node->charCount ? *iL = i : *iR = i;}
 
-    else if (list->at(i)->node->charCount < list->at(*iL)->node->charCount) *iL = i;
-    else if (list->at(i)->node->charCount < list->at(*iR)->node->charCount) *iR = i;
-
+    else if (list->at(i)->node->charCount < list->at(*iL)->node->charCount) 
+    {
+      cout<<'9'<<endl; 
+      *iL = i;
+    }
+    else if (list->at(i)->node->charCount < list->at(*iR)->node->charCount) 
+    {
+      cout<<"10"<<endl;
+      *iR = i;
+    }
+  }
+  if (list->at(*iL)->node->charCount < list->at(*iR)->node->charCount)
+  {
+    i   = *iR;
+    *iR = *iL;
+    *iL = i;
   }
   return true;
 }
@@ -43,14 +59,12 @@ void HuffTree::buildBranch(size_t leftIndex, size_t rightIndex, NodeList * list)
 {
   HuffNode * leftNode = list->extract(leftIndex);
   HuffNode * rightNode = list->extract(rightIndex);
-  HuffNode * n = new HuffNode();
+  HuffNode * n;
   if (leftNode->rightChild == NULL)
-  {
-    delete n;
     n = leftNode;
-  }
   else
   {
+    n = new HuffNode();
     n->leftChild = leftNode;
     n->charCount = leftNode->charCount;
     for (size_t i = 0; i < leftNode->leftArr.size(); i++)
@@ -61,9 +75,10 @@ void HuffTree::buildBranch(size_t leftIndex, size_t rightIndex, NodeList * list)
   n->charCount += rightNode->charCount;
   if (rightNode->rightChild == NULL)
   {
-    n->rightChild = NULL;
+    n->rightChild = rightNode->leftChild;
     n->rightArr = rightNode->leftArr;
-    delete rightNode;
+    //delete rightNode;
+    //rightNode = NULL;
   }
   else
   {
@@ -79,10 +94,7 @@ void HuffTree::buildBranch(size_t leftIndex, size_t rightIndex, NodeList * list)
 HuffNode * HuffTree::buildTree()
 {
   size_t l,r;
-  cout<<"2"<<endl;
-
   NodeList * leafs = new NodeList();
-
   HuffNode * tmp   = new HuffNode();
   HuffNode * root;
   cout<<"3"<<endl;
@@ -103,6 +115,7 @@ HuffNode * HuffTree::buildTree()
     tmp->charCount = this->charProbs[i];
     leafs->append(tmp);
   }
+  leafs->printList();
   cout<<"5"<<endl;
 
   while (findMins(&l, &r, leafs))
@@ -110,6 +123,7 @@ HuffNode * HuffTree::buildTree()
     cout<<"6"<<endl;
 
     buildBranch(l, r, leafs);
+    leafs->printList();
     cout<<"7"<<endl;
 
   }
@@ -119,7 +133,8 @@ HuffNode * HuffTree::buildTree()
   root = leafs->extract(0);
   cout<<"8"<<endl;
 
-  delete leafs;
+  //delete leafs;
+  //leafs = NULL;
   cout<<"9"<<endl;
 
   return root;

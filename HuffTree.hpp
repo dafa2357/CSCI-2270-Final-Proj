@@ -26,6 +26,18 @@ struct HuffNode
     this->charCount = n->charCount;
     return this;
   }
+  void printNode()
+  {
+    cout << "charCount: " << charCount << endl;
+    cout << "leftArr (size " << leftArr.size() << ") :";
+    for (size_t i = 0; i < leftArr.size(); i++)
+      cout << leftArr[i] << ' ';
+    cout << endl;
+    cout << "rightArr (size " << rightArr.size() << ") :";
+    for (size_t i = 0; i < rightArr.size(); i++)
+      cout << rightArr[i] << ' ';
+    cout << endl;
+  }
 };
 
 struct NodeList
@@ -39,7 +51,18 @@ struct NodeList
   NodeList * at(size_t n);
   NodeList * operator[](size_t n);
   HuffNode * extract(size_t n);
+  void printList()
+  {
+    NodeList * tmp = this;
+    while (tmp != NULL)
+    {
+      cout << "List Size: " << tmp->size << endl;
+      tmp->node->printNode();
+      tmp = tmp->next;
+    }
+  }
 };
+
 
 class HuffTree
 {
