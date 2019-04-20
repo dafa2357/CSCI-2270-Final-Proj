@@ -57,6 +57,7 @@ public:
   HuffTree(unsigned long long * charProbs);
   HuffTree(char * fileName);
   ~HuffTree();
+  void print2DUtil(int space);
 
   vector<int> encode(unsigned char);
   //decode();
