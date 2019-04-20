@@ -16,7 +16,7 @@ HuffTree::HuffTree(unsigned long long * charProbs)
 
 HuffTree::~HuffTree() {}
 
-void HuffTree::print2DUtilHelper(HuffNode *node, int space) {
+void HuffTree::print2DUtilHelper(HuffNode *node, int space) { 
     const int COUNT = 10;
 	// Base case
     if (node == NULL)
