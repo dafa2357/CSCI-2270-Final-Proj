@@ -52,6 +52,7 @@ class HuffTree
   void destroyNode(HuffNode *);
   vector<int> search(HuffNode *, unsigned char);
   void buildArr();
+  void print2DUtilHelper(HuffNode *currNode, int space);
 
 public:
   HuffTree(unsigned long long * charProbs);
