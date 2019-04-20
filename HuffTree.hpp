@@ -40,8 +40,7 @@ struct HuffNode
   }
 };
 
-struct NodeList
-{
+struct NodeList {
   NodeList * next;
   HuffNode * node;
   size_t     size;
@@ -75,11 +74,13 @@ class HuffTree
   void destroyNode(HuffNode *);
   vector<int> search(HuffNode *, unsigned char);
   void buildArr();
+  void print2DUtilHelper(HuffNode *currNode, int space);
 
 public:
   HuffTree(unsigned long long * charProbs);
   HuffTree(char * fileName);
   ~HuffTree();
+  void print2DUtil(int space);
 
   vector<int> encode(unsigned char);
   //decode();

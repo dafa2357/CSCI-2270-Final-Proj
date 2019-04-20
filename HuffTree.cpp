@@ -14,9 +14,29 @@ HuffTree::HuffTree(unsigned long long * charProbs)
 
 }
 
-HuffTree::~HuffTree()
-{
+HuffTree::~HuffTree() {}
 
+void HuffTree::print2DUtilHelper(HuffNode *node, int space) { 
+    const int COUNT = 10;
+	// Base case
+    if (node == NULL)
+        return;
+    // Increase distance between levels
+    space += COUNT;
+    // Process right child first
+    print2DUtilHelper(node->right, space);
+    // Print current node after space
+    // count
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("%d\n", node->key);
+    // Process left child
+    print2DUtilHelper(node->left, space);
+}
+
+void HuffTree::print2DUtil(int space) {
+	print2DUtilHelper(root, space);
 }
 
 bool HuffTree::findMins(size_t * iL, size_t * iR, NodeList * list)
