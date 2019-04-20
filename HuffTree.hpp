@@ -74,13 +74,12 @@ class HuffTree
   void destroyNode(HuffNode *);
   vector<int> search(HuffNode *, unsigned char);
   void buildArr();
-  void print2DUtilHelper(HuffNode *currNode, int space);
+  void print2DUtilHelper(HuffNode *, int);
 
 public:
   HuffTree(unsigned long long * charProbs);
-  HuffTree(char * fileName);
   ~HuffTree();
-  void print2DUtil(int space);
+  void print2DUtil(HuffNode *, int);
 
   vector<int> encode(unsigned char);
   //decode();

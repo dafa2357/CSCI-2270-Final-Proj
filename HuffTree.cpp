@@ -24,18 +24,18 @@ void HuffTree::print2DUtilHelper(HuffNode *node, int space) {
     // Increase distance between levels
     space += COUNT;
     // Process right child first
-    print2DUtilHelper(node->right, space);
+    print2DUtilHelper(node->rightChild, space);
     // Print current node after space
     // count
     printf("\n");
     for (int i = COUNT; i < space; i++)
         printf(" ");
-    printf("%d\n", node->key);
+    printf("%llu\n", node->charCount);
     // Process left child
-    print2DUtilHelper(node->left, space);
+    print2DUtilHelper(node->leftChild, space);
 }
 
-void HuffTree::print2DUtil(int space) {
+void HuffTree::print2DUtil(HuffNode * root, int space) {
 	print2DUtilHelper(root, space);
 }
 
