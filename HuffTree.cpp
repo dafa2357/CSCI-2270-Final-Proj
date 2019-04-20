@@ -35,6 +35,10 @@ void HuffTree::print2DUtilHelper(HuffNode *node, int space) {
     print2DUtilHelper(node->left, space);
 }
 
+void HuffTree::print2DUtil(int space) {
+	print2DUtilHelper(root, space);
+}
+
 bool HuffTree::findMins(size_t * iL, size_t * iR, NodeList * list)
 {
   if (!iL || !iR) return false;
