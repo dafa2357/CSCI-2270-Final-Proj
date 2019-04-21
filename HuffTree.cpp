@@ -42,20 +42,23 @@ void HuffTree::print2DUtil(HuffNode * root, int space) {
 bool HuffTree::findMins(size_t * iL, size_t * iR, NodeList * list)
 {
   if (!iL || !iR) return false;
-  if (list->size < 2) return false;
+  if (list->sizze() < 2) return false;
   *iL = 0;
   *iR = 1;
   size_t i;
 
-  for (i = 2; i < list->size; i++)
+  for (i = 2; i < list->sizze(); i++)
   {
 
-    if ( list->at(i)->node->charCount < list->at(*iL)->node->charCount
-      && list->at(i)->node->charCount < list->at(*iR)->node->charCount)
+    if ( (list->at(i)->node->charCount < list->at(*iL)->node->charCount)
+      && (list->at(i)->node->charCount < list->at(*iR)->node->charCount))
     { 
       cout<<'8'<<endl;
-      list->at(*iL)->node->charCount > list->at(*iR)->node->charCount ? *iL = i : *iR = i;}
-
+      if (list->at(*iL)->node->charCount > list->at(*iR)->node->charCount) 
+        *iL = i ;
+      else
+        *iR = i;
+    }
     else if (list->at(i)->node->charCount < list->at(*iL)->node->charCount) 
     {
       cout<<'9'<<endl; 
@@ -77,37 +80,69 @@ bool HuffTree::findMins(size_t * iL, size_t * iR, NodeList * list)
 }
 void HuffTree::buildBranch(size_t leftIndex, size_t rightIndex, NodeList * list)
 {
+  cout << "LI" << leftIndex << endl;
   HuffNode * leftNode = list->extract(leftIndex);
+  cout << "RI" << rightIndex <<endl;
   HuffNode * rightNode = list->extract(rightIndex);
-  HuffNode * n;
-  if (leftNode->rightChild == NULL)
-    n = leftNode;
-  else
+  HuffNode * n = new HuffNode();
+  n->leftChild = leftNode;
+  n->rightChild = rightNode;
+  n->charCount = leftNode->charCount + rightNode->charCount;
+  if (leftNode->key == NULL)
   {
-    n = new HuffNode();
-    n->leftChild = leftNode;
-    n->charCount = leftNode->charCount;
-    for (size_t i = 0; i < leftNode->leftArr.size(); i++)
-      n->leftArr.push_back(leftNode->leftArr[i]);
+    n->leftArr = (const vector<unsigned char>) leftNode->leftArr;
     for (size_t i = 0; i < leftNode->rightArr.size(); i++)
       n->leftArr.push_back(leftNode->rightArr[i]);
   }
-  n->charCount += rightNode->charCount;
+  else
+  {
+    n->leftArr.push_back(*(leftNode->key));
+  }
+  if (rightNode->key == NULL)
+  {
+    n->rightArr = (const vector<unsigned char>) rightNode->leftArr;
+    for (size_t i = 0; i < rightNode->rightArr.size(); i++)
+      n->rightArr.push_back(rightNode->rightArr[i]);
+  }
+  else
+  {
+    n->rightArr.push_back(*(rightNode->key));
+  }
+    
+    /*
+  if (leftNode->rightArr.size() == 0)
+  {
+    if (rightNode->leftArr.size() == 1 && rightNode->rightArr.size() == 0)
+    {
+      n = leftNode;
+      n->rightArr = rightNode->leftArr;
+
+    if (rightNode->leftArr.size() == 1 && rightNode->rightArr.size() == 0)
+    {
+      n = leftNode;
+      n->rightArr = rightNode->leftArr;
+  else
+  {
+    n->leftChild = leftNode;
+    //for (size_t i = 0; i < leftNode->leftArr.size(); i++)
+    //   n->leftArr.push_back(leftNode->leftArr[i]);
+  }
+  n->rightArr = (const vector<unsigned char>) rightNode->leftArr;
   if (rightNode->rightChild == NULL)
   {
     n->rightChild = rightNode->leftChild;
-    n->rightArr = rightNode->leftArr;
+    //n->rightArr = const rightNode->leftArr;
     //delete rightNode;
     //rightNode = NULL;
   }
   else
   {
-    n->rightChild = rightNode;
-    for (size_t i = 0; i < rightNode->leftArr.size(); i++)
-      n->rightArr.push_back(rightNode->leftArr[i]);
+    //for (size_t i = 0; i < rightNode->leftArr.size(); i++)
+    //  n->rightArr.push_back(rightNode->leftArr[i]);
     for (size_t i = 0; i < rightNode->rightArr.size(); i++)
       n->rightArr.push_back(rightNode->rightArr[i]);
   }
+  */
   list->append(n);
 }
 
@@ -117,26 +152,22 @@ HuffNode * HuffTree::buildTree()
   NodeList * leafs = new NodeList();
   HuffNode * tmp   = new HuffNode();
   HuffNode * root;
-  cout<<"3"<<endl;
-
   tmp->leftChild   = NULL;
   tmp->rightChild  = NULL;
   tmp->leftArr.push_back(0);
   tmp->charCount = this->charProbs[0];
   leafs->node = tmp;
-  cout<<"4"<<endl;
 
   for (unsigned char i = 1; i <= UCHAR_MAX && i; i++)
   {
     tmp = new HuffNode();
     tmp->leftChild  = NULL;
     tmp->rightChild = NULL;
-    tmp->leftArr.push_back(i);
+    tmp->key = new unsigned char (i);
     tmp->charCount = this->charProbs[i];
     leafs->append(tmp);
   }
   leafs->printList();
-  cout<<"5"<<endl;
 
   while (findMins(&l, &r, leafs))
   {

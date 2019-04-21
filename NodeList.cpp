@@ -9,10 +9,26 @@ NodeList::NodeList()
   size = 1;
 }
 
+size_t NodeList::sizze()
+{
+  NodeList * tmp = this;
+  size_t t = 1;
+  while (tmp->next != NULL)
+  {
+    t++;
+    tmp = tmp->next;
+  }
+  return t;
+}
 void NodeList::append(HuffNode * n)
 {
   NodeList * tmp = this;
-  while (tmp->size-1)
+  if (this->node == NULL) 
+  {
+    this->node = n;
+    return;
+  }
+  while (tmp->next != NULL)
   {
     tmp->size++;
     tmp = tmp->next;
@@ -22,8 +38,6 @@ void NodeList::append(HuffNode * n)
 
   tmp->next = new NodeList();
   tmp->next->node = n;
-
-
 }
 
 NodeList * NodeList::at(size_t n)
@@ -31,7 +45,7 @@ NodeList * NodeList::at(size_t n)
   NodeList * tmp = this;
   for (size_t i = 0; i < n; i++)
   {
-    if (tmp->next == NULL) append(NULL);
+    if (tmp->next == NULL) return NULL;
     tmp = tmp->next;
   }
   return tmp;
@@ -42,7 +56,7 @@ NodeList * NodeList::operator[](size_t n)
   NodeList * tmp = this;
   for (size_t i = 0; i < n; i++)
   {
-    if (tmp->next == NULL) append(NULL);
+    if (tmp->next == NULL) return NULL;
     tmp = tmp->next;
   }
   return tmp;
@@ -53,7 +67,8 @@ HuffNode * NodeList::extract(size_t n)
   NodeList * prv = NULL;
   NodeList * nxt = this;
   HuffNode * tmp;
-  for (size_t i = 0; i < n; i++)
+  if (nxt->sizze()<= n) return NULL;
+  for (size_t i = 0; i < n ; i++)
   {
     nxt->size--;
     prv = nxt;
