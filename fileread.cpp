@@ -45,44 +45,60 @@ unsigned long long * inFiProbs(string inFilename)
 
 }
 
-bool pushtofile(string inFilename, ofstream * outf, HuffTree * test){
+bool pushtofile(string inFilename, ofstream * outf, HuffTree * test)
+{
+  bitset <8> trucks;
+  unsigned char buffer = 0;
+  unsigned char ILikeTurtles = 0;                   //temp storage of single byte
+  vector <int> encodedBits;                         //temporary vector of bits
+  size_t whAtsAbYte = 0;                            //number of bits in encodedBits vector
+  size_t bufferPos = 0;                             //position in bit buffer trucks 
+  ifstream inFile;                                  //create ifstream;
 
-	if(!(outf->is_open()) || !(outf->good())) {//check output file is open and good
-		cout<<"Output File Not Opened."<<endl;
-		outf->close();
-		return 1;
-		}
+  if(!(outf->is_open()) || (outf->good()))          //check output file is open and good
+  {
+    cout<<"Output File Not Opened."<<endl;
+    outf->close();
+    return false;
+  }
 
-	ifstream inFile;//create i 	fstream;
+  inFile.open( inFilename, ios::in|ios::binary);    //open file as binary input
+  if(!(inFile.is_open()) || !(inFile.good()))       //check if open and good
+  {
+    cout<<"Input File Not Opened."<<endl;
+    inFile.close();
+    return false;
+  }
+  streambuf *inF = inFile.rdbuf();                            //creates accesible stream buffer
 
-	inFile.open( inFilename, ios::in|ios::binary);//open file as binary input
-	if(!(inFile.is_open()) || !(inFile.good())) {//check if open and good
-		cout<<"Input File Not Opened."<<endl;
-		inFile.close();
-		return 1;
-		}
 
-	std::bitset <1> trucks;
-	unsigned char ILikeTurtles = 0; //temp storage of single byte
-	vector <int> encodedBits;//temporary vector of bits
-	size_t whAtsAbYte = 0;//number of bits in encodedBits vector
-	std::streambuf * inF = inFile.rdbuf();//creates accesible stream buffer
-	//ofstream outf ( oFile, std::ofstream::binary| std::ofstream::trunc);//creates output file of same type               //USED FOR TESTING: REMOVE
-
-	while( inF->sgetc() != EOF){ //checks for valid input
-		ILikeTurtles = inF->sbumpc();//gets uchar from file moves to next position in streambuf
-		encodedBits = test->encode(ILikeTurtles);//gets bit vector
-		whAtsAbYte = encodedBits.size();//gets length of bit string/vector
-		for(size_t i = 0; i < whAtsAbYte; i++){//runs through bit vector pushing single bits to file
-			trucks[0] = encodedBits[i];//bit set to correct val
-			(*outf)<<trucks[0];//bit pushed to output file
-		}
-		encodedBits.clear();
-	}
-	inFile.close();
-	return 0;
+  while( inF->sgetc() != EOF)                       //checks for valid input
+  { 
+    ILikeTurtles = inF->sbumpc();                   //gets uchar from file moves to next position in streambuf
+    encodedBits = test->encode(ILikeTurtles);       //gets bit vector
+    whAtsAbYte = encodedBits.size();                //gets length of bit string/vector
+    for(size_t i = 0; i < whAtsAbYte; i++)          //runs through bit vector pushing single bits to file
+    { 
+      encodedBits[i] &= 1;                          //bit mask for first bit
+      encodedBits[i] = encodedBits[i] << bufferPos; //shift bit to the right place in the buffer
+      buffer |= encodedBits[i];                     //add the encoded bit to the output buffer
+      
+      //trucks[bufferPos] = encodedBits[i];                   //bit set to correct val
+      if (!bufferPos)
+      {
+			  //(*outf)<<trucks[0];                               //bit pushed to output file
+        (*outf)<<buffer;                            //output buffer to file
+        buffer = 0;                                 //reset buffer
+        bufferPos = 7;                              //reset buffer position
+      }
+      else bufferPos--;                             //decrement buffer position
+    }
+    encodedBits.clear();
+  }
+  if (bufferPos != 7) (*outf) << buffer;            //send rest of buffer if not full byte of data (0 filled)
+  inFile.close();
+  return true;
 }
-
 
 int main()
 {
