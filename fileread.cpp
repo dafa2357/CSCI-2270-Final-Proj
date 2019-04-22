@@ -86,7 +86,7 @@ bool pushtofile(string inFilename, ofstream * outf, HuffTree * test){
 
 int main()
 {
-	string filename = "aab.txt";
+	string filename = "test.txt";
 	unsigned long long * pr = inFiProbs(filename);
 	size_t q =0;
 	for( q = 0; q < UCHAR_MAX; q++ ){//prints counts of each uchar from inFile                 //USED FOR TESTING: REMOVE
