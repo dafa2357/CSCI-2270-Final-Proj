@@ -271,3 +271,4 @@ const vector<int>  HuffTree::encode(unsigned char inChar)
 {
   return treeArr[inChar];
 }
+ 
