@@ -4,14 +4,11 @@ using namespace std;
 
 HuffTree::HuffTree(unsigned long long * charProbs)
 {
-  //cout<<"0"<<endl;
-
-  for (int i = 0; i <= UCHAR_MAX; i++)
+  for (size_t i = 0; i <= UCHAR_MAX; i++)
     this->charProbs[i] = charProbs[i];
-  //cout<<"1"<<endl;
-
+  root = buildTree();
   buildArr();
-
+  curDecodeNode = root;
 }
 
 HuffTree::~HuffTree() {}
@@ -163,7 +160,7 @@ HuffNode * HuffTree::buildTree()
   size_t l,r;
   NodeList * leafs = new NodeList();
   HuffNode * tmp ;//  = new HuffNode();
-  HuffNode * root;
+  HuffNode * rootn;
   //cout<<"3"<<endl;
 /*
   tmp->leftChild   = NULL;
@@ -197,14 +194,14 @@ HuffNode * HuffTree::buildTree()
   //cout<<"2"<<endl;
 
 
-  root = leafs->extract(0);
+  rootn = leafs->extract(0);
   //cout<<"11"<<endl;
 
   //delete leafs;
   //leafs = NULL;
 
 
-  return root;
+  return rootn;
 }
 
 void HuffTree::destroyNode(HuffNode * curNode)
@@ -254,14 +251,14 @@ vector<int> HuffTree::search(HuffNode * root, unsigned char c)
 void HuffTree::buildArr()
 {
 
-  HuffNode * root = buildTree();
-  cout<<"12"<<endl;
+  //HuffNode * root = buildTree();
+  //cout<<"12"<<endl;
   for (unsigned char i = 0; i < UCHAR_MAX; i++)// MIssing 255 *shrugs*
     treeArr[i] = search(root, i);
 
   //cout<<"13"<<endl;
 
-  destroyNode(root);
+  //destroyNode(root);
 
   //cout<<"14"<<endl;
 
@@ -271,4 +268,26 @@ const vector<int>  HuffTree::encode(unsigned char inChar)
 {
   return treeArr[inChar];
 }
+bool HuffTree::decode(unsigned char * outChar, int inBit)// not compleate
+{
+  if (inBit)
+  {
+    if (curDecodeNode->rightChild = NULL)
+    
+    curDecodeNode = curDecodeNode->rightChild;
+  }
+  else
+  {
+    if (curDecodeNode->leftChild = NULL )
+    { 
+      if (inBit == 0 && curDecodeNode->leftArr.size() == 1)
+      {
+        outChar = &(curDecodeNode->leftArr[0]);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
  
