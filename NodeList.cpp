@@ -9,23 +9,14 @@ NodeList::NodeList()
   size = 1;
 }
 
-size_t NodeList::sizze()
-{
-  NodeList * tmp = this;
-  size_t t = 1;
-  while (tmp->next != NULL)
-  {
-    t++;
-    tmp = tmp->next;
-  }
-  return t;
-}
 void NodeList::append(HuffNode * n)
 {
+
   NodeList * tmp = this;
-  if (this->node == NULL) 
+  if (this->node == NULL)
   {
     this->node = n;
+    this->size = 1;
     return;
   }
   while (tmp->next != NULL)
@@ -33,11 +24,15 @@ void NodeList::append(HuffNode * n)
     tmp->size++;
     tmp = tmp->next;
   }
+
   tmp->size++;
 
 
   tmp->next = new NodeList();
   tmp->next->node = n;
+
+
+
 }
 
 NodeList * NodeList::at(size_t n)
@@ -62,21 +57,31 @@ NodeList * NodeList::operator[](size_t n)
   return tmp;
 }
 
-HuffNode * NodeList::extract(size_t n)
+HuffNode * NodeList::extract(size_t n)//n=index
 {
   NodeList * prv = NULL;
   NodeList * nxt = this;
   HuffNode * tmp;
-  if (nxt->sizze()<= n) return NULL;
-  for (size_t i = 0; i < n ; i++)
+
+  if(this->size <= n) return NULL;
+  //find node ot index
+  for (size_t i = 0; i < n; i++)
   {
     nxt->size--;
     prv = nxt;
     nxt = nxt->next;
   }
-  tmp = nxt->node;
-  if (prv == NULL)
+  tmp = nxt->node; //set return val
+  if (prv == NULL) //if first node
   {
+    if (nxt->next == NULL)//if only node
+    {
+      this->size--;
+      this->node = NULL;
+      //delete this;
+      //this = NULL;
+      return tmp;
+    }
     nxt = nxt->next;
     if (nxt != NULL)
     {
@@ -85,8 +90,8 @@ HuffNode * NodeList::extract(size_t n)
       this->size--;
       nxt->node = NULL;
       nxt->next = NULL;
-      //!!! needs destructor !!!
-//      delete nxt;
+      //    !!! needs destructor !!!
+      //delete nxt;
     }
     return tmp;
   }

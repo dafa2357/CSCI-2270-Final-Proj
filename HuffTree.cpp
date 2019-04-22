@@ -4,11 +4,11 @@ using namespace std;
 
 HuffTree::HuffTree(unsigned long long * charProbs)
 {
-  cout<<"0"<<endl;
+  //cout<<"0"<<endl;
 
   for (int i = 0; i <= UCHAR_MAX; i++)
     this->charProbs[i] = charProbs[i];
-  cout<<"1"<<endl;
+  //cout<<"1"<<endl;
 
   buildArr();
 
@@ -16,7 +16,7 @@ HuffTree::HuffTree(unsigned long long * charProbs)
 
 HuffTree::~HuffTree() {}
 
-void HuffTree::print2DUtilHelper(HuffNode *node, int space) { 
+void HuffTree::print2DUtilHelper(HuffNode *node, int space) {
     const int COUNT = 10;
 	// Base case
     if (node == NULL)
@@ -29,8 +29,8 @@ void HuffTree::print2DUtilHelper(HuffNode *node, int space) {
     // count
     printf("\n");
     for (int i = COUNT; i < space; i++)
-        printf(" ");
-    printf("%llu\n", node->charCount);
+        {printf(" ");}
+        cout<<node->charCount<<endl;
     // Process left child
     print2DUtilHelper(node->leftChild, space);
 }
@@ -39,110 +39,122 @@ void HuffTree::print2DUtil(HuffNode * root, int space) {
 	print2DUtilHelper(root, space);
 }
 
-bool HuffTree::findMins(size_t * iL, size_t * iR, NodeList * list)
+bool HuffTree::findMins(size_t * iL, size_t * iR,  NodeList * list)
 {
   if (!iL || !iR) return false;
-  if (list->sizze() < 2) return false;
+  if (list->size < 2){
+    //cout<<"falsy"<<endl;
+     return false;
+   }
   *iL = 0;
   *iR = 1;
-  size_t i;
-
-  for (i = 2; i < list->sizze(); i++)
+  size_t i=2;
+  NodeList * lN = list;
+  NodeList * rN = list->next;
+  NodeList * temp = list->next->next;
+  if(temp == NULL)
   {
-
-    if ( (list->at(i)->node->charCount < list->at(*iL)->node->charCount)
-      && (list->at(i)->node->charCount < list->at(*iR)->node->charCount))
-    { 
-      cout<<'8'<<endl;
-      if (list->at(*iL)->node->charCount > list->at(*iR)->node->charCount) 
-        *iL = i ;
-      else
-        *iR = i;
-    }
-    else if (list->at(i)->node->charCount < list->at(*iL)->node->charCount) 
+    if (*iL < *iR)
     {
-      cout<<'9'<<endl; 
+      i = *iR;
+      *iR = *iL;
       *iL = i;
     }
-    else if (list->at(i)->node->charCount < list->at(*iR)->node->charCount) 
-    {
-      cout<<"10"<<endl;
-      *iR = i;
-    }
+    return true;
+    //do shit
   }
-  if (list->at(*iL)->node->charCount < list->at(*iR)->node->charCount)
+  while( temp->next != NULL){
+    if((lN->node->charCount > temp->node->charCount) && (rN->node->charCount > temp->node->charCount)){
+      if(lN->node->charCount > rN->node->charCount){
+        *iL = i;
+        lN = temp;
+      }
+      else{
+        *iR = i;
+        rN = temp;
+      }
+    }
+    else if( temp->node->charCount < lN->node->charCount){
+      *iL = i;
+      lN = temp;
+    }
+    else if(temp->node->charCount < rN->node->charCount){
+      *iR = i;
+      rN = temp;
+    }
+    temp = temp->next;
+    i++;
+  }
+  if (*iL < *iR)
   {
-    i   = *iR;
+    i = *iR;
     *iR = *iL;
     *iL = i;
+
   }
+  //cout<<"list->size="<<list->size<<endl;
+  //cout<<"iL="<<*iL<<endl<<"*iR="<<*iR<<endl;
   return true;
 }
 void HuffTree::buildBranch(size_t leftIndex, size_t rightIndex, NodeList * list)
 {
-  cout << "LI" << leftIndex << endl;
+
+
   HuffNode * leftNode = list->extract(leftIndex);
-  cout << "RI" << rightIndex <<endl;
+  //cout<<"BBr"<<endl;
+
   HuffNode * rightNode = list->extract(rightIndex);
-  HuffNode * n = new HuffNode();
-  n->leftChild = leftNode;
-  n->rightChild = rightNode;
-  n->charCount = leftNode->charCount + rightNode->charCount;
-  if (leftNode->key == NULL)
+  HuffNode * n;
+  if (list->size == 0){
+    //cout << "L" << leftIndex << " R"<< rightIndex<< " s" <<list->size<< endl;
+//    list->printList();
+  }
+
+  if (leftNode->rightChild == NULL&&leftNode->rightArr.size() ==0)
   {
-    n->leftArr = (const vector<unsigned char>) leftNode->leftArr;
+    //cout<<"left->right=null"<<endl;
+    n = leftNode;
+    n->rightChild = rightNode;
+    for (size_t i = 0; i < rightNode->leftArr.size(); i++)
+      n->rightArr.push_back(rightNode->leftArr[i]);
+    for (size_t i = 0; i < rightNode->rightArr.size(); i++)
+      n->rightArr.push_back(rightNode->rightArr[i]);
+
+    n->charCount += rightNode->charCount;
+
+  }
+  else
+  {
+    //cout<<"create new node"<<endl;
+    n = new HuffNode();
+    n->leftChild = leftNode;
+    n->rightChild = rightNode;
+    //cout<<"()"<<endl;
+    n->charCount = leftNode->charCount + rightNode->charCount;
+    for (size_t i = 0; i < leftNode->leftArr.size(); i++)
+      n->leftArr.push_back(leftNode->leftArr[i]);
     for (size_t i = 0; i < leftNode->rightArr.size(); i++)
       n->leftArr.push_back(leftNode->rightArr[i]);
-  }
-  else
-  {
-    n->leftArr.push_back(*(leftNode->key));
-  }
-  if (rightNode->key == NULL)
-  {
-    n->rightArr = (const vector<unsigned char>) rightNode->leftArr;
-    for (size_t i = 0; i < rightNode->rightArr.size(); i++)
-      n->rightArr.push_back(rightNode->rightArr[i]);
-  }
-  else
-  {
-    n->rightArr.push_back(*(rightNode->key));
-  }
-    
-    /*
-  if (leftNode->rightArr.size() == 0)
-  {
-    if (rightNode->leftArr.size() == 1 && rightNode->rightArr.size() == 0)
-    {
-      n = leftNode;
-      n->rightArr = rightNode->leftArr;
 
-    if (rightNode->leftArr.size() == 1 && rightNode->rightArr.size() == 0)
+    if (rightNode->rightChild == NULL)
     {
-      n = leftNode;
+      //cout<<"r->rc=null"<<endl;
+      n->rightChild = rightNode->leftChild;
       n->rightArr = rightNode->leftArr;
-  else
-  {
-    n->leftChild = leftNode;
-    //for (size_t i = 0; i < leftNode->leftArr.size(); i++)
-    //   n->leftArr.push_back(leftNode->leftArr[i]);
+      //delete rightNode;
+      //rightNode = NULL;
+    }
+    else
+    {
+      //cout<<"r->rc != null"<<endl;
+      n->rightChild = rightNode;
+      for (size_t i = 0; i < rightNode->leftArr.size(); i++)
+        n->rightArr.push_back(rightNode->leftArr[i]);
+      for (size_t i = 0; i < rightNode->rightArr.size(); i++)
+        n->rightArr.push_back(rightNode->rightArr[i]);
+    }
   }
-  n->rightArr = (const vector<unsigned char>) rightNode->leftArr;
-  if (rightNode->rightChild == NULL)
-  {
-    n->rightChild = rightNode->leftChild;
-    //n->rightArr = const rightNode->leftArr;
-    //delete rightNode;
-    //rightNode = NULL;
-  }
-  else
-  {
-    //for (size_t i = 0; i < rightNode->leftArr.size(); i++)
-    //  n->rightArr.push_back(rightNode->leftArr[i]);
-    for (size_t i = 0; i < rightNode->rightArr.size(); i++)
-      n->rightArr.push_back(rightNode->rightArr[i]);
-  }
-  */
+  //cout<<"append"<<endl;
   list->append(n);
 }
 
@@ -150,43 +162,47 @@ HuffNode * HuffTree::buildTree()
 {
   size_t l,r;
   NodeList * leafs = new NodeList();
-  HuffNode * tmp   = new HuffNode();
+  HuffNode * tmp ;//  = new HuffNode();
   HuffNode * root;
+  //cout<<"3"<<endl;
+/*
   tmp->leftChild   = NULL;
   tmp->rightChild  = NULL;
   tmp->leftArr.push_back(0);
   tmp->charCount = this->charProbs[0];
   leafs->node = tmp;
-
-  for (unsigned char i = 1; i <= UCHAR_MAX && i; i++)
+  cout<<"4"<<endl;
+*/
+  for (size_t i = 0; i <= UCHAR_MAX ; i++)
   {
     tmp = new HuffNode();
     tmp->leftChild  = NULL;
     tmp->rightChild = NULL;
-    tmp->key = new unsigned char (i);
+    tmp->leftArr.push_back(i);
     tmp->charCount = this->charProbs[i];
     leafs->append(tmp);
   }
-  leafs->printList();
+  //leafs->printList();
+  //cout<<"5"<<endl;
 
   while (findMins(&l, &r, leafs))
   {
-    cout<<"6"<<endl;
+    //cout<<"6"<<endl;
 
     buildBranch(l, r, leafs);
-    leafs->printList();
-    cout<<"7"<<endl;
+    //leafs->printList();
+    //cout<<"7"<<endl;
 
   }
-  cout<<"2"<<endl;
+  //cout<<"2"<<endl;
 
 
   root = leafs->extract(0);
-  cout<<"8"<<endl;
+  //cout<<"11"<<endl;
 
   //delete leafs;
   //leafs = NULL;
-  cout<<"9"<<endl;
+
 
   return root;
 }
@@ -239,13 +255,19 @@ void HuffTree::buildArr()
 {
 
   HuffNode * root = buildTree();
-
-  for (unsigned char i = 0; i <= UCHAR_MAX; i++)
+  cout<<"12"<<endl;
+  for (unsigned char i = 0; i < UCHAR_MAX; i++)// MIssing 255 *shrugs*
     treeArr[i] = search(root, i);
+
+  //cout<<"13"<<endl;
+
   destroyNode(root);
+
+  //cout<<"14"<<endl;
+
   return;
 }
-vector<int>  HuffTree::encode(unsigned char inChar)
+const vector<int>  HuffTree::encode(unsigned char inChar)
 {
   return treeArr[inChar];
 }

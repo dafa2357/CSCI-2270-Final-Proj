@@ -12,28 +12,10 @@ struct HuffNode
 {
   HuffNode *            leftChild ; // coded 0
   HuffNode *            rightChild; // coded 1
-  unsigned char *       key;
   vector<unsigned char> leftArr;
   vector<unsigned char> rightArr;
   unsigned long long    charCount;
 
-
-  HuffNode() 
-  {
-    leftChild = NULL;
-    rightChild = NULL;
-    key = NULL;
-    charCount = 0;
-  }
-  HuffNode(HuffNode * lc, HuffNode * rc, vector<unsigned char> la, 
-           vector<unsigned char> ra, unsigned long long cc)
-  {
-    leftChild = lc;
-    rightChild = rc;
-    leftArr = la;
-    rightArr = ra;
-    charCount = cc;
-  }
 
   HuffNode * copy(HuffNode * n)
   {
@@ -47,21 +29,18 @@ struct HuffNode
   void printNode()
   {
     cout << "charCount: " << charCount << endl;
-    if (key != NULL)
-      cout << "key: " << *key << endl;
     cout << "leftArr (size " << leftArr.size() << ") :";
     for (size_t i = 0; i < leftArr.size(); i++)
-      cout << leftArr[i] << ' ';
+      cout << (int)leftArr[i] << ' ';
     cout << endl;
     cout << "rightArr (size " << rightArr.size() << ") :";
     for (size_t i = 0; i < rightArr.size(); i++)
-      cout << rightArr[i] << ' ';
+      cout << (int)rightArr[i] << ' ';
     cout << endl;
   }
 };
 
-struct NodeList 
-{
+struct NodeList {
   NodeList * next;
   HuffNode * node;
   size_t     size;
@@ -71,7 +50,6 @@ struct NodeList
   NodeList * at(size_t n);
   NodeList * operator[](size_t n);
   HuffNode * extract(size_t n);
-  size_t sizze();
   void printList()
   {
     NodeList * tmp = this;
@@ -80,7 +58,6 @@ struct NodeList
       cout << "List Size: " << tmp->size << endl;
       tmp->node->printNode();
       tmp = tmp->next;
-      cout << "end?" << endl<<endl;
     }
   }
 };
@@ -96,16 +73,15 @@ class HuffTree
   HuffNode * buildTree();
   void destroyNode(HuffNode *);
   vector<int> search(HuffNode *, unsigned char);
-  //void buildArr();
+  void buildArr();
   void print2DUtilHelper(HuffNode *, int);
 
 public:
-  HuffTree(unsigned long long *);
+  HuffTree(unsigned long long * charProbs);
   ~HuffTree();
   void print2DUtil(HuffNode *, int);
-  void buildArr();
 
-  vector<int> encode(unsigned char);
+  const vector<int> encode(unsigned char);
   //decode();
 };
 
