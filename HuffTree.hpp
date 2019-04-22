@@ -67,6 +67,8 @@ class HuffTree
 {
   unsigned long long charProbs[UCHAR_MAX + 1];
   vector<int> treeArr[UCHAR_MAX + 1];
+  HuffNode * root;
+  HuffNode * curDecodeNode;
 
   bool findMins(size_t *, size_t *, NodeList *);
   void buildBranch(size_t, size_t, NodeList *);
@@ -82,7 +84,7 @@ public:
   void print2DUtil(HuffNode *, int);
 
   const vector<int> encode(unsigned char);
-  //decode();
+  bool decode(unsigned char * outChar, int inBit);
 };
 
 #endif
