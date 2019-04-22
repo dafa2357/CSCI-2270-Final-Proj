@@ -123,7 +123,7 @@ int main()
 	outf<<filename;
 	for( q = 0; q < UCHAR_MAX; q++ ){//puts counts of each uchar to output file::: change to  <=
 			outf<< pr[q];}
-	pushtofile(filename, &outf, test);
+//	pushtofile(filename, &outf, test);
 
 
 
@@ -136,3 +136,4 @@ int main()
 
 	return 0;
 }
+ 
