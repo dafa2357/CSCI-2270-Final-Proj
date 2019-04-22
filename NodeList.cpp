@@ -99,4 +99,4 @@ HuffNode * NodeList::extract(size_t n)//n=index
   nxt->next = NULL;
 //  delete nxt;
   return tmp;
-}
+} 
