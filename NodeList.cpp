@@ -31,8 +31,6 @@ void NodeList::append(HuffNode * n)
   tmp->next = new NodeList();
   tmp->next->node = n;
 
-
-
 }
 
 NodeList * NodeList::at(size_t n)
@@ -99,4 +97,4 @@ HuffNode * NodeList::extract(size_t n)//n=index
   nxt->next = NULL;
 //  delete nxt;
   return tmp;
-} 
+}

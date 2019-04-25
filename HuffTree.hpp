@@ -69,6 +69,7 @@ class HuffTree
   vector<int> treeArr[UCHAR_MAX + 1];
   HuffNode * root;
   HuffNode * curDecodeNode;
+  vector<int> bitBuffer;
 
   bool findMins(size_t *, size_t *, NodeList *);
   void buildBranch(size_t, size_t, NodeList *);
@@ -77,15 +78,15 @@ class HuffTree
   vector<int> search(HuffNode *, unsigned char);
   void buildArr();
   void print2DUtilHelper(HuffNode *, int);
+  bool decodeHelper(unsigned char ** outChar, int inBit);
 
 public:
   HuffTree(unsigned long long * charProbs);
   ~HuffTree();
   void print2DUtil(HuffNode *, int);
-
   const vector<int> encode(unsigned char);
-  bool decode(unsigned char * outChar, int inBit);
+  bool decode(unsigned char * outChar, unsigned char inBits);
+  bool leftOverBits();
 };
 
 #endif
- 
