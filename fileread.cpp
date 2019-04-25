@@ -179,17 +179,5 @@ int main(int argc, char* argv[])
 		cout<<"encoding File..."<<endl;
 		encodeFile(filename);
 	}
-/////////////////////////////////////////////////////////////////////////////////
-//find ofilename
-
-//	ifstream encodedFi (ofilename, ofstream::binary | ofstream::trunc);
-//	decodeFile(ofilename);
-/*///////////////////////////////////////
-  MAKE WORK WITH DIRCTORIES
-  PUSH FUNCTION FOR OUT FILE
-  read file again while encoding with tree getchar pushchar
-//////////////////////////////////////*/
-
-
 	return 0;
 }
